@@ -1,0 +1,20 @@
+volumes:
+  postgres:
+services:
+  db:
+    image: postgres
+    container_name: my-postgres1
+    ports:
+      - '5233:5432'
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: median
+    volumes:
+      - '/Users/shariar2/Documents/nest/median/data:/var/lib/postgresql/data'
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
