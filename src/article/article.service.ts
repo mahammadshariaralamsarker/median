@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -6,23 +6,33 @@ import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class ArticleService {
   constructor(private readonly prisma: PrismaService) {}
-  create(createArticleDto: CreateArticleDto) {
-    return 'This action adds a new article';
+  async create(createArticleDto: CreateArticleDto) {
+    const data = await this.prisma.article.create({
+      data: { ...createArticleDto },
+    });
+    return { message: 'This action adds a new article', data };
   }
 
   async findAll() {
-    const data = await this.prisma.article.findMany({
-      where: { published: true },
+    const data = await this.prisma.article.findMany({});
+    return { message: `This action returns all article`, data };
+  }
+
+  async findOne(id: number) {
+    return this.prisma.article.findUnique({
+      where: { id },
+      include: {
+        author: true,
+      },
     });
-    return { message: `This action returns all article` };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} article`;
-  }
-
-  update(id: number, updateArticleDto: UpdateArticleDto) {
-    return `This action updates a #${id} article`;
+  async update(id: number, updateArticleDto: UpdateArticleDto) {
+    const result = await this.prisma.article.update({
+      where: { id },
+      data: { ...updateArticleDto },
+    });
+    return { message: `This action updates a #${id} article`, result };
   }
 
   remove(id: number) {
