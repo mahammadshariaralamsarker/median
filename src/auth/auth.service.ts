@@ -1,5 +1,3 @@
-//src/auth/auth.service.ts
-
 import { PrismaService } from './../prisma/prisma.service';
 import {
   Injectable,
