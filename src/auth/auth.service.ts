@@ -21,7 +21,6 @@ export class AuthService {
     if (!user) {
       throw new NotFoundException(`No user found for email: ${email}`);
     }
-
     if (user.password !== password) {
       throw new UnauthorizedException('Invalid password');
     }
